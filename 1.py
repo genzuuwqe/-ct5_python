@@ -1,13 +1,23 @@
 import tkinter as tk
 from datetime import datetime, date
-TASKS = [
-    ("День рожденияяя",    "03.01.2026", "past"),
-    ("Начало 2026 года",   "01.01.2026", "past"),
-    ("Я поступил в itHub", "01.09.2025", "past"),
-    ("Идет пара",          "20.05.2026", "today"),
-    ("ЛЕТООООООООО",       "01.06.2026", "future"), 
-    ("Новый 2027 год",     "01.01.2027", "future"),
-]
+
+def load_tasks(filename="tasks.txt"):
+    loaded_tasks = []
+    with open(filename, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = line.split("|")
+            if len(parts) == 3:
+                event = parts[0].strip()
+                date_str = parts[1].strip()
+                type = parts[2].strip()
+                loaded_tasks.append((event,date_str,type))
+    return loaded_tasks
+
+TASKS = load_tasks()
+
 def diff(target_date):
     target_date = datetime.strptime(target_date, "%d.%m.%Y").date()
     today = date.today()
